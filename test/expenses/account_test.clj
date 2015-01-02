@@ -12,8 +12,8 @@
    (->FinancialRecord "06/02/2014" "2960-2" "Compra com Cartão - 31/05 23:11 RIA ROSARIO" "" "183473" "-15.75")])
 
 (deftest reader-can-read-extracts
-  (testing "read extract"
-    (is (> (count (read-extract "resources/account/extrato.csv")) 1))))
+  (testing "read extract" 
+    (is (> (count (read-extract "resources/account/extrato.csv")) 1)))) 
 
 (deftest convert-vector-to-record
   (testing "vector read from file is converted to FinancialRecord"
@@ -32,5 +32,3 @@
     (is (zero? (income (transform-files fixtures-fs)))))
   (testing "it takes all files and spits the sum of debts"
     (is (= (debt (transform-files fixtures-fs)) 19.95))))
-
-(run-tests)
