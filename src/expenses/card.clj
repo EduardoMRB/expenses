@@ -1,18 +1,17 @@
 (ns expenses.card
   (:require [expenses.financial-record :refer :all]
-            [ofx-clj.core :as ofx])
+            [ofx-clj.core :as ofx]
+            [clj-time.coerce :as c])
   (:import [net.sf.ofx4j.domain.data.creditcard CreditCardResponseMessageSet
                                                 CreditCardStatementResponseTransaction
                                                 CreditCardStatementResponse]))
-
-(def the-file "resources/card/faturaCartao.ofx")
 
 (defmethod ofx/parse-data CreditCardResponseMessageSet
   [message-set]
   (ofx/obj-to-map message-set
                   :type [.getType str]
                   :version .getVersion
-                  :mesages [.getResponseMessages #(map ofx/parse-data %)]))
+                  :messages [.getResponseMessages #(map ofx/parse-data %)]))
 
 (defmethod ofx/parse-data CreditCardStatementResponseTransaction
   [transaction]
@@ -31,4 +30,35 @@
                   :response-message-name .getResponseMessageName
                   :transaction-list [.getTransactionList ofx/parse-data]))
 
-(ofx/parse the-file)
+(def the-file "resources/card/faturaCartao.ofx")
+
+(defn parse-file [file]
+  (ofx/parse file))
+
+(defn- credit-card? [transaction]
+  (= (:type transaction) "creditcard"))
+
+(defn- transactions [message]
+  (get-in message [:message :transaction-list :transactions]))
+
+(defn credit-card-transactions [parsed-file] 
+  (->> parsed-file
+       (filter credit-card?)
+       (mapcat :messages)
+       (mapcat transactions)))
+
+(defn transactions->FinancialRecord [transactions]
+  (let [trans-map (fn [transaction]
+                    (-> {}
+                        (assoc :date (c/from-long (:date-posted transaction)))
+                        (assoc :origin nil)
+                        (assoc :description (:memo transaction))
+                        (assoc :balance-date nil)
+                        (assoc :doc-number nil)
+                        (assoc :value (:amount transaction))))]
+    (map trans-map transactions)))
+
+(def transacs (credit-card-transactions (parse-file the-file)))
+(clojure.pprint/pprint (parse-file the-file))
+
+(transactions->FinancialRecord transacs)
