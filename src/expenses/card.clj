@@ -1,7 +1,9 @@
 (ns expenses.card
   (:require [expenses.financial-record :refer :all]
             [ofx-clj.core :as ofx]
-            [clj-time.coerce :as c]) (:import [net.sf.ofx4j.domain.data.creditcard CreditCardResponseMessageSet CreditCardStatementResponseTransaction
+            [clj-time.coerce :as c]) 
+  (:import [net.sf.ofx4j.domain.data.creditcard CreditCardResponseMessageSet 
+                                                CreditCardStatementResponseTransaction
                                                 CreditCardStatementResponse]))
 
 (defmethod ofx/parse-data CreditCardResponseMessageSet
@@ -27,8 +29,6 @@
                   :marketing-info .getMarketingInfo
                   :response-message-name .getResponseMessageName
                   :transaction-list [.getTransactionList ofx/parse-data]))
-
-(def the-file "resources/card/faturaCartao.ofx")
 
 (defn parse-file [file]
   (ofx/parse file))
