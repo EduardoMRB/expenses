@@ -1,9 +1,7 @@
 (ns expenses.card
   (:require [expenses.financial-record :refer :all]
             [ofx-clj.core :as ofx]
-            [clj-time.coerce :as c])
-  (:import [net.sf.ofx4j.domain.data.creditcard CreditCardResponseMessageSet
-                                                CreditCardStatementResponseTransaction
+            [clj-time.coerce :as c]) (:import [net.sf.ofx4j.domain.data.creditcard CreditCardResponseMessageSet CreditCardStatementResponseTransaction
                                                 CreditCardStatementResponse]))
 
 (defmethod ofx/parse-data CreditCardResponseMessageSet
@@ -49,16 +47,10 @@
 
 (defn transactions->FinancialRecord [transactions]
   (let [trans-map (fn [transaction]
-                    (-> {}
-                        (assoc :date (c/from-long (:date-posted transaction)))
-                        (assoc :origin nil)
-                        (assoc :description (:memo transaction))
-                        (assoc :balance-date nil)
-                        (assoc :doc-number nil)
-                        (assoc :value (:amount transaction))))]
+                    {:date (c/from-long (:date-posted transaction))
+                     :origin nil
+                     :description (:memo transaction)
+                     :balance-date nil
+                     :doc-number nil
+                     :value (:amount transaction)})]
     (map trans-map transactions)))
-
-(def transacs (credit-card-transactions (parse-file the-file)))
-(clojure.pprint/pprint (parse-file the-file))
-
-(transactions->FinancialRecord transacs)
