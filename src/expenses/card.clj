@@ -1,7 +1,7 @@
 (ns expenses.card
   (:require [expenses.financial-record :refer :all]
             [ofx-clj.core :as ofx]
-            [clj-time.coerce :as c]) 
+            [clj-time.coerce :as c])
   (:import [net.sf.ofx4j.domain.data.creditcard CreditCardResponseMessageSet 
                                                 CreditCardStatementResponseTransaction
                                                 CreditCardStatementResponse]))
@@ -45,12 +45,19 @@
        (mapcat :messages)
        (mapcat transactions)))
 
+(defn transaction->FinancialRecord [transaction]
+  (let [trans-map {:date (c/from-long (:date-posted transaction))
+                   :origin nil
+                   :description (:memo transaction)
+                   :balance-date nil
+                   :doc-number nil
+                   :value (:amount transaction)}]
+    (map->FinancialRecord trans-map)))
+
 (defn transactions->FinancialRecord [transactions]
-  (let [trans-map (fn [transaction]
-                    {:date (c/from-long (:date-posted transaction))
-                     :origin nil
-                     :description (:memo transaction)
-                     :balance-date nil
-                     :doc-number nil
-                     :value (:amount transaction)})]
-    (map trans-map transactions)))
+  (map transaction->FinancialRecord transactions))
+
+(defn transform-file [file]
+  (let [parsed-file (parse-file file)
+        transacs (credit-card-transactions parsed-file)]
+    (transactions->FinancialRecord transacs)))
