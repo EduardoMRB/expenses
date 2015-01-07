@@ -30,9 +30,6 @@
                   :response-message-name .getResponseMessageName
                   :transaction-list [.getTransactionList ofx/parse-data]))
 
-(defn parse-file [file]
-  (ofx/parse file))
-
 (defn transaction->FinancialRecord [transaction]
   (let [trans-map {:date (c/from-long (:date-posted transaction))
                    :origin nil
@@ -46,6 +43,13 @@
   (map transaction->FinancialRecord transactions))
 
 (defn transform-file [file]
-  (let [parsed-file (parse-file file)
+  (let [parsed-file (ofx/parse file)
         transacs (ofx/find-all-transactions parsed-file "creditcard")]
     (transactions->FinancialRecord transacs)))
+
+(defn transform-files 
+  "Takes a file-sequence, reads it's ofx files 
+  and return a lazy sequence of FinancialRecord"
+  [fseq]
+  (let [ofx-files (filter #(re-seq #"\.ofx$" (str %)) fseq)]
+    (mapcat transform-file ofx-files)))
