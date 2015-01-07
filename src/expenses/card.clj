@@ -33,18 +33,6 @@
 (defn parse-file [file]
   (ofx/parse file))
 
-(defn- credit-card? [transaction]
-  (= (:type transaction) "creditcard"))
-
-(defn- transactions [message]
-  (get-in message [:message :transaction-list :transactions]))
-
-(defn credit-card-transactions [parsed-file] 
-  (->> parsed-file
-       (filter credit-card?)
-       (mapcat :messages)
-       (mapcat transactions)))
-
 (defn transaction->FinancialRecord [transaction]
   (let [trans-map {:date (c/from-long (:date-posted transaction))
                    :origin nil
@@ -59,5 +47,5 @@
 
 (defn transform-file [file]
   (let [parsed-file (parse-file file)
-        transacs (credit-card-transactions parsed-file)]
+        transacs (ofx/find-all-transactions parsed-file "creditcard")]
     (transactions->FinancialRecord transacs)))
