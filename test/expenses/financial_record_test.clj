@@ -19,9 +19,9 @@
                          :doc-number 213231
                          :value 11.23}))
 (def test-records 
-  [(->FinancialRecord "05/30/2014" "" "Saldo Anterior" "" "0" "111.87")
-   (->FinancialRecord "06/02/2014" "2960-2" "Compra com Cartão - 02/06 21:50    KILO BYTE" "" "178653" "-4.20")
-   (->FinancialRecord "06/02/2014" "2960-2" "Compra com Cartão - 31/05 23:11 RIA ROSARIO" "" "183473" "-15.75")])
+  [(->FinancialRecord "05/30/2014" "" "Saldo Anterior" "" "0" 111.87M)
+   (->FinancialRecord "06/02/2014" "2960-2" "Compra com Cartão - 02/06 21:50    KILO BYTE" "" "178653" -4.20M)
+   (->FinancialRecord "06/02/2014" "2960-2" "Compra com Cartão - 31/05 23:11 RIA ROSARIO" "" "183473" -15.75M)])
 
 (deftest financial-record-date
   (testing "date function get date from string"
@@ -35,4 +35,4 @@
 
 (deftest sum-all-expenses
   (testing "sum of expenses"
-    (is (= (debt test-records) 19.95))))
+    (is (= (debt test-records) -19.95M))))

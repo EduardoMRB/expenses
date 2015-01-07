@@ -18,20 +18,22 @@
     date
     (f/parse br-format date)))
 
+(defn- sum-expenses-by 
+  "Takes a predicate fn and a coll of FinancialRecord and return
+  the sum of values filtered by the predicate fn"
+  [pred records]
+  (reduce #(+ %1 (:value %2)) 0 (filter pred records)))
+
 (defn income [records]
-  (let [income? (fn [record]
+  (letfn [(income? [record]
                   (let [excludes-descriptions #{"S A L D O" "Saldo Anterior"}]
                     (and 
                       (not (contains? excludes-descriptions
                                       (:description record)))
-                      (pos? (read-string (:value record))))))
-        without-balance (filter income? records)
-        values (map #(read-string (:value %)) without-balance)]
-    (reduce + values)))
+                      (pos? (:value record)))))]
+    (sum-expenses-by income? records)))
 
-(defn debt [expenses]
-  (let [expense-values? (fn [expense]
-                          (neg? (read-string (:value expense))))
-        without-incomes (filter expense-values? expenses)
-        values (map #(* -1 (read-string (:value %))) without-incomes)]
-    (reduce + values)))
+(defn debt [records]
+  (letfn [(expense-values? [record]
+            (neg? (:value record)))]
+    (sum-expenses-by expense-values? records)))
