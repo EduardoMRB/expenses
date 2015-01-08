@@ -4,7 +4,6 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [clojure-csv/clojure-csv "2.0.1"]
                  [net.sf.ofx4j/ofx4j "1.6"]
                  [cc.artifice/ofx-clj "0.1"]
                  [clj-time "0.9.0"]]

@@ -1,6 +1,6 @@
-(ns expenses.card-test
+(ns expenses.parser-test
   (:require [clojure.test :refer :all]
-            [expenses.card :refer :all]
+            [expenses.parser :refer :all]
             [expenses.financial-record :refer :all]
             [clj-time.core :as t :refer [date-time]]
             [clojure.java.io :as io]))

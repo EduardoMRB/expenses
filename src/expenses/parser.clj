@@ -1,4 +1,4 @@
-(ns expenses.card
+(ns expenses.parser
   (:require [expenses.financial-record :refer :all]
             [ofx-clj.core :as ofx]
             [clj-time.coerce :as c])
