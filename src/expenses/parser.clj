@@ -42,10 +42,24 @@
 (defn transactions->FinancialRecord [transactions]
   (map transaction->FinancialRecord transactions))
 
+(defn- banking-or-credit-card? [response]
+  (contains? #{"creditcard" "banking"} (:type response)))
+
+(defn- find-response [message]
+  (get-in message [:message 
+                   :transaction-list 
+                   :transactions]))
+
+(defn- find-transactions [response]
+  (let [messages (mapcat :messages response)]
+    (mapcat find-response messages)))
+
 (defn transform-file [file]
   (let [parsed-file (ofx/parse file)
-        transacs (ofx/find-all-transactions parsed-file "creditcard")]
-    (transactions->FinancialRecord transacs)))
+        transactions (->> parsed-file
+                          (filter banking-or-credit-card?)
+                          (find-transactions))]
+    (transactions->FinancialRecord transactions)))
 
 (defn transform-files 
   "Takes a file-sequence, reads it's ofx files 
