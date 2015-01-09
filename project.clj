@@ -7,4 +7,5 @@
                  [net.sf.ofx4j/ofx4j "1.6"]
                  [cc.artifice/ofx-clj "0.1"]
                  [clj-time "0.9.0"]]
+  :profiles {:dev {:dependencies [[midje "1.6.3"]]}}
   :main expenses.core)
