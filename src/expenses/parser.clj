@@ -32,10 +32,7 @@
 
 (defn transaction->FinancialRecord [transaction]
   (let [trans-map {:date (c/from-long (:date-posted transaction))
-                   :origin nil
                    :description (:memo transaction)
-                   :balance-date nil
-                   :doc-number nil
                    :value (:amount transaction)}]
     (map->FinancialRecord trans-map)))
 
