@@ -1,6 +1,5 @@
 (ns expenses.core
   (:require [clojure.java.io :as io]
-            [expenses.financial-record :refer :all]
             [expenses.parser :refer :all]))
 
 (defn file? [file]

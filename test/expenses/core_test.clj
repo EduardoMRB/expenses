@@ -1,3 +1,3 @@
 (ns expenses.core-test
-  (:require [clojure.test :refer :all]
+  (:require [midje.sweet :refer :all]
             [expenses.core :refer :all]))
