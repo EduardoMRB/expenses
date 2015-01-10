@@ -6,6 +6,9 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [net.sf.ofx4j/ofx4j "1.6"]
                  [cc.artifice/ofx-clj "0.1"]
-                 [clj-time "0.9.0"]]
+                 [clj-time "0.9.0"]
+                 [com.datomic/datomic-free "0.9.5078" :exclusions [joda-time]]]
   :profiles {:dev {:dependencies [[midje "1.6.3"]]}}
+  :repositories {"my.datomic.com" {:url "https://my.datomic.com/repo"
+                                   :creds :gpg}}
   :main expenses.core)
