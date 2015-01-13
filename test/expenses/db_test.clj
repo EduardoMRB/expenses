@@ -35,3 +35,10 @@
       (add-financial-record test-record2)
       (find-all-financial-records))) 
    => (concat [test-record] [test-record2]))
+
+(fact "we can retrieve a FinancialRecord by description"
+  (with-redefs [conn (create-empty-in-memory-db)]
+    (do
+      (add-financial-record test-record)
+      (find-financial-record "description"))
+    => test-record))

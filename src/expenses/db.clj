@@ -2,7 +2,18 @@
   (:require [expenses.financial-record :refer :all]
             [datomic.api :as d]))
 
+;; TODO: Setup local database and find a way to start the connection by config.
 (def conn nil)
+(def rules
+  '[[(financial-records ?posted-at ?description ?value)
+     [?f :financial-record/posted-at ?posted-at]
+     [?f :financial-record/description ?description]
+     [?f :financial-record/value ?value]]])
+
+(defn- qe 
+  "Takes a datomic query and arbitrary number of arguments and execute query"
+  [query & args]
+  (apply (partial d/q query (d/db conn) rules) args))
 
 (defn add-financial-record [record]
   @(d/transact conn [{:db/id (d/tempid :db.part/user)
@@ -12,9 +23,15 @@
 
 (defn find-all-financial-records []
   (map vec->FinancialRecord 
-       (d/q '[:find ?posted-at ?description ?value 
-              :where 
-              [?f :financial-record/posted-at ?posted-at]
-              [?f :financial-record/description ?description]
-              [?f :financial-record/value ?value]]
-            (d/db conn))))
+       (qe '[:find ?posted-at ?description ?value 
+             :in $ %
+             :where 
+             (financial-records ?posted-at ?description ?value)])))
+
+(defn find-financial-record [description]
+  (first (map vec->FinancialRecord 
+              (qe '[:find ?posted-at ?description ?value
+                    :in $ % ?description
+                    :where
+                    (financial-records ?posted-at ?description ?value)]
+                  description))))
