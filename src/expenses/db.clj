@@ -35,3 +35,9 @@
                     :where
                     (financial-records ?posted-at ?description ?value)]
                   description))))
+
+(defn import-financial-records! 
+  "Inserts a collection of FinancialRecord into the database"
+  [records]
+  (doseq [record records]
+    (add-financial-record record)))
