@@ -25,7 +25,7 @@
   (with-redefs [conn (create-empty-in-memory-db)] 
     (do
       (add-financial-record test-record)
-      (find-all-financial-records))) 
+      (find-all-financial-records (d/db conn)))) 
   => [test-record])
 
 (fact "we can retrieve multiple FinancialRecords from the database"
@@ -33,26 +33,26 @@
     (do
       (add-financial-record test-record)
       (add-financial-record test-record2)
-      (find-all-financial-records))) 
+      (find-all-financial-records (d/db conn)))) 
   => (concat [test-record] [test-record2]))
 
 (fact "we can retrieve a FinancialRecord by description"
   (with-redefs [conn (create-empty-in-memory-db)]
     (do
       (add-financial-record test-record)
-      (find-financial-record "description"))
+      (find-financial-record (d/db conn) "description"))
     => test-record))
 
 (fact "we can import various FinancialRecords"
   (with-redefs [conn (create-empty-in-memory-db)]
     (do
       (import-financial-records! [test-record test-record2])
-      (find-all-financial-records)))
+      (find-all-financial-records (d/db conn))))
   => (concat [test-record] [test-record2]))
 
 (fact "we can't import the same FinancialRecord twice"
   (with-redefs [conn (create-empty-in-memory-db)]
     (do
       (import-financial-records! [test-record test-record])
-      (find-all-financial-records)))
+      (find-all-financial-records (d/db conn))))
   => [test-record])
