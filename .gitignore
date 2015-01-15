@@ -9,3 +9,4 @@ pom.xml.asc
 /.nrepl-port
 resources/account/*
 resources/card/*
+resources/datomic/dev-transactor-template.properties
