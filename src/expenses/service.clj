@@ -6,14 +6,17 @@
             [ring.util.response :as ring-resp]
             [expenses.db :as db]))
 
-(defn list-financial-records
-  [request]
+(defn list-financial-records [request]
   (ring-resp/response (db/all-financial-records)))
+
+(defn list-financial-record [{{id :id} :path-params}]
+  (ring-resp/response (db/financial-record-by-id (Long/parseLong id))))
 
 (defroutes routes
   [[["/financial-record" {:get list-financial-records} 
      ^:interceptors [(body-params/body-params) 
-                     bootstrap/json-body]]]])
+                     bootstrap/json-body]
+     ["/:id" {:get list-financial-record}]]]])
 
 ;; Consumed by helloworld.server/create-server
 ;; See bootstrap/default-interceptors for additional options you can configure

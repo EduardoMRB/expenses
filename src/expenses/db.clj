@@ -56,6 +56,17 @@
                   db
                   description))))
 
+(defn- find-financial-record-by-id [db id]
+  (first (qe '[:find ?posted-at ?description ?value
+                :in $ % ?f
+                :where
+                (financial-records ?posted-at ?description ?value ?f)]
+              db
+              id)))
+
+(defn financial-record-by-id [id]
+  (vec->FinancialRecord (find-financial-record-by-id (d/db conn) id)))
+
 (defn import-financial-records! 
   "Inserts a collection of FinancialRecord into the database"
   [records]

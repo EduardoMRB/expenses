@@ -65,3 +65,11 @@
       (import-financial-records! [test-record test-record])
       (all-financial-records)))
   => [test-record])
+
+(fact "we can retrieve a financial record by id"
+  (with-redefs [conn (create-empty-in-memory-db)]
+    (do
+      (add-financial-record test-record)
+      (let [eid (#'expenses.db/find-financial-record-id (d/db conn) test-record)]
+        (financial-record-by-id eid))))
+  => test-record)
