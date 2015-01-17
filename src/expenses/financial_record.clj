@@ -2,7 +2,7 @@
   (:import org.joda.time.DateTime))
 
 (defrecord FinancialRecord 
-  [date description value])
+  [date description value id])
 
 (defn vec->FinancialRecord [expense]
   (apply ->FinancialRecord expense))

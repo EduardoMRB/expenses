@@ -3,12 +3,18 @@
             [io.pedestal.test :refer :all]
             [io.pedestal.http :as bootstrap]
             [expenses.service :as service]
-            [expenses.db-test :as db-test]
-            [expenses.db :as db]
-            [cheshire.core :as json]))
+            [expenses.test-helper :refer :all]
+            [cheshire.core :as json]
+            [expenses.db :as db]))
 
 (def service
   (::bootstrap/service-fn (bootstrap/create-servlet service/service)))
+
+;; TODO: finish this checker
+(defn- response-contains-records
+  "Checks if json response contains passed FinancialRecords"
+  [& records]
+  (has every?))
 
 (fact "There is no home page"
   (:status (response-for service :get "/")) => 404)
@@ -17,19 +23,20 @@
   (:status (response-for service :get "/financial-record")) => 200
   (get-in (response-for service :get "/financial-record")
           [:headers "Content-Type"]) => "application/json;charset=UTF-8"
+
   (fact "imported financial records are displayed in json"
-    (with-redefs [db/conn (db-test/create-empty-in-memory-db)]
-      (do
-        (db/add-financial-record db-test/test-record)
-        (db/add-financial-record db-test/test-record2)
-        (:body (response-for service :get "/financial-record"))))
-    => (json/generate-string [db-test/test-record db-test/test-record2]))
+    (with-local-conn
+      (db/add-financial-record test-record)
+      (db/add-financial-record test-record2)
+      (json/parse-string (:body (response-for service :get "/financial-record")) 
+                         keyword))
+    => string?)
+
   (fact "we can see the representation of a specific record"
-    (with-redefs [db/conn (db-test/create-empty-in-memory-db)]
-      (do
-        (db/add-financial-record db-test/test-record)
-        (let [eid (#'expenses.db/find-financial-record-id
-                    (datomic.api/db db/conn) db-test/test-record)
-              url (str "/financial-record/" eid)]
-          (:body (response-for service :get url)))))
-    => (json/generate-string db-test/test-record)))
+    (with-local-conn
+      (db/add-financial-record test-record)
+      (let [eid (#'expenses.db/find-financial-record-id
+                  (datomic.api/db db/conn) test-record)
+            url (str "/financial-record/" eid)]
+        (:body (response-for service :get url))))
+    => (json/generate-string test-record)))

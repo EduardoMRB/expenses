@@ -38,7 +38,7 @@
                         :financial-record/value value}])))
 
 (defn- find-all-financial-records [db]
-  (qe '[:find ?posted-at ?description ?value 
+  (qe '[:find ?posted-at ?description ?value ?f
         :in $ %
         :where 
         (financial-records ?posted-at ?description ?value ?f)]
@@ -49,7 +49,7 @@
 
 (defn find-financial-record [db description]
   (first (map vec->FinancialRecord 
-              (qe '[:find ?posted-at ?description ?value
+              (qe '[:find ?posted-at ?description ?value ?f
                     :in $ % ?description
                     :where
                     (financial-records ?posted-at ?description ?value ?f)]
@@ -57,7 +57,7 @@
                   description))))
 
 (defn- find-financial-record-by-id [db id]
-  (first (qe '[:find ?posted-at ?description ?value
+  (first (qe '[:find ?posted-at ?description ?value ?f
                 :in $ % ?f
                 :where
                 (financial-records ?posted-at ?description ?value ?f)]

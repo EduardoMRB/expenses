@@ -9,8 +9,8 @@
 (def test-dir "test/fixtures")
 (def test-fs (->> test-dir io/file file-seq))
 (def test-records 
-  [(->FinancialRecord (date-time 2013 12 04) "Reference" 598.36M)
-   (->FinancialRecord (date-time 2013 12 07) "BLIZZARD ENT*WOW SUB   800-592-5499" -12.9M)])
+  [(->FinancialRecord (date-time 2013 12 04) "Reference" 598.36M nil)
+   (->FinancialRecord (date-time 2013 12 07) "BLIZZARD ENT*WOW SUB   800-592-5499" -12.9M nil)])
 
 (fact "takes a file and transforms it into a seq of FinancialRecords"
   (transform-file test-file) => test-records)
