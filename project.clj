@@ -16,7 +16,9 @@
                  [ch.qos.logback/logback-classic "1.1.2" :exclusions [org.slf4j/slf4j-api]]
                  [org.slf4j/jul-to-slf4j "1.7.7"]
                  [org.slf4j/jcl-over-slf4j "1.7.7"]
-                 [org.slf4j/log4j-over-slf4j "1.7.7"]]
+                 [org.slf4j/log4j-over-slf4j "1.7.7"]
+                 
+                 [org.clojure/core.async "0.1.346.0-17112a-alpha"]]
   :resource-paths ["config" "resources"]
   :datomic {:schemas ["resources/datomic/schema.edn"]}
   :profiles {:dev {:dependencies [[midje "1.6.3"]
