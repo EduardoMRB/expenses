@@ -1,10 +1,10 @@
 (ns expenses.parser
   (:require [expenses.financial-record :refer :all]
-            [ofx-clj.core :as ofx]
-            [clj-time.coerce :as c])
+            [ofx-clj.core :as ofx])
   (:import [net.sf.ofx4j.domain.data.creditcard CreditCardResponseMessageSet 
                                                 CreditCardStatementResponseTransaction
-                                                CreditCardStatementResponse]))
+                                                CreditCardStatementResponse]
+           java.util.Date))
 
 (defmethod ofx/parse-data CreditCardResponseMessageSet
   [message-set]
@@ -31,7 +31,7 @@
                   :transaction-list [.getTransactionList ofx/parse-data]))
 
 (defn transaction->FinancialRecord [transaction]
-  (let [trans-map {:date (c/from-long (:date-posted transaction))
+  (let [trans-map {:date (Date. (:date-posted transaction))
                    :description (:memo transaction)
                    :value (:amount transaction)}]
     (map->FinancialRecord trans-map)))
