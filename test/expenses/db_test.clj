@@ -48,10 +48,9 @@
     => (contains-financial-record test-record)))
 
 (fact "we can import various FinancialRecords"
-  (with-redefs [conn (create-empty-in-memory-db)]
-    (do
-      (import-financial-records! [test-record test-record2])
-      (all-financial-records)))
+  (with-local-conn
+    (import-financial-records! [test-record test-record2])
+    (all-financial-records))
   => (contains-financial-records))
 
 ;; Going to think about what validation should be
