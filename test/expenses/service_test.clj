@@ -10,12 +10,6 @@
 (def service
   (::bootstrap/service-fn (bootstrap/create-servlet service/service)))
 
-;; TODO: finish this checker
-(defn- response-contains-records
-  "Checks if json response contains passed FinancialRecords"
-  [& records]
-  (has every?))
-
 (fact "There is no home page"
   (:status (response-for service :get "/")) => 404)
 
@@ -28,9 +22,10 @@
     (with-local-conn
       (db/add-financial-record test-record)
       (db/add-financial-record test-record2)
-      (json/parse-string (:body (response-for service :get "/financial-record")) 
-                         keyword))
-    => string?)
+      (:body (response-for service :get "/financial-record")))
+    => (contains (str (json/generate-string (dissoc test-record2 :id))
+                      (json/generate-string (dissoc test-record :id)))
+                 :gaps-ok))
 
   (fact "we can see the representation of a specific record"
     (with-local-conn
@@ -39,4 +34,5 @@
                   (datomic.api/db db/conn) test-record)
             url (str "/financial-record/" eid)]
         (:body (response-for service :get url))))
-    => (json/generate-string test-record)))
+    => (contains (json/generate-string (dissoc test-record :id))
+                 :gaps-ok)))

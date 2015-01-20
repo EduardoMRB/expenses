@@ -16,7 +16,6 @@
 (defn import-records [dir]
   (let [fs-chan (chan)
         rec-chan (chan)
-        counter (atom 0)
         fseq (fseq-for dir)]
     (go
       (doseq [fs fseq]
