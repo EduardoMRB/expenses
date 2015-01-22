@@ -4,24 +4,35 @@
             [io.pedestal.http.body-params :as body-params]
             [io.pedestal.http.ring-middlewares :as ring-middlewares]
             [io.pedestal.http.route.definition :refer [defroutes]]
+            [io.pedestal.interceptor :as interceptor]
             [ring.util.response :as ring-resp]
             [clojure.java.io :as io]
-            [expenses.db :as db]))
+            [expenses.db :as db]
+            [expenses.parser :as parser]))
 
-(defn list-financial-records [request]
+(defn list-financial-records [_]
   (ring-resp/response (db/all-financial-records)))
 
 (defn list-financial-record [{{id :id} :path-params}]
   (ring-resp/response (db/financial-record-by-id (Long/parseLong id))))
 
-(defn test-file-request [request]
-  (clojure.pprint/pprint request)
-  (ring-resp/response (str (get-in request [:headers "content-length"]))))
+(defn import-file [request]
+  (let [file (get-in request [:multipart-params "file" :tempfile])]
+    (-> file
+        parser/transform-file
+        db/import-financial-records!))
+  (ring-resp/redirect "/financial-record"))
+
+(interceptor/defon-request long-content-length 
+  [request]
+  (if-let [c-len (get-in request [:headers "content-length"])]
+    (assoc-in request [:headers "content-length"] (long c-len))))
 
 (defroutes routes
   [[["/financial-record" {:get list-financial-records
-                          :post test-file-request} 
-     ^:interceptors [(body-params/body-params) 
+                          :post import-file} 
+     ^:interceptors [(body-params/body-params)
+                     long-content-length
                      (ring-middlewares/multipart-params)
                      bootstrap/json-body]
      ["/:id" {:get list-financial-record}]]]])
