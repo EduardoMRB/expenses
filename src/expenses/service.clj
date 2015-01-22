@@ -2,8 +2,10 @@
   (:require [io.pedestal.http :as bootstrap]
             [io.pedestal.http.route :as route]
             [io.pedestal.http.body-params :as body-params]
+            [io.pedestal.http.ring-middlewares :as ring-middlewares]
             [io.pedestal.http.route.definition :refer [defroutes]]
             [ring.util.response :as ring-resp]
+            [clojure.java.io :as io]
             [expenses.db :as db]))
 
 (defn list-financial-records [request]
@@ -12,9 +14,15 @@
 (defn list-financial-record [{{id :id} :path-params}]
   (ring-resp/response (db/financial-record-by-id (Long/parseLong id))))
 
+(defn test-file-request [request]
+  (clojure.pprint/pprint request)
+  (ring-resp/response (str (get-in request [:headers "content-length"]))))
+
 (defroutes routes
-  [[["/financial-record" {:get list-financial-records} 
+  [[["/financial-record" {:get list-financial-records
+                          :post test-file-request} 
      ^:interceptors [(body-params/body-params) 
+                     (ring-middlewares/multipart-params)
                      bootstrap/json-body]
      ["/:id" {:get list-financial-record}]]]])
 
@@ -43,4 +51,3 @@
               ::bootstrap/type :jetty
               ;;::bootstrap/host "localhost"
               ::bootstrap/port 8080})
-

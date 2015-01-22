@@ -8,7 +8,8 @@
                  [cc.artifice/ofx-clj "0.1"]
                  [clj-time "0.9.0"]
 
-                 [com.datomic/datomic-pro "0.9.5078" :exclusions [joda-time]]
+                 [com.datomic/datomic-pro "0.9.5078" :exclusions [joda-time
+                                                                  org.slf4j/slf4j-nop]]
 
                  [io.pedestal/pedestal.service "0.3.1"]
                  [io.pedestal/pedestal.jetty "0.3.1"]
@@ -18,7 +19,9 @@
                  [org.slf4j/jcl-over-slf4j "1.7.7"]
                  [org.slf4j/log4j-over-slf4j "1.7.7"]
                  
-                 [org.clojure/core.async "0.1.346.0-17112a-alpha"]]
+                 [org.clojure/core.async "0.1.346.0-17112a-alpha"]
+                 
+                 [ns-tracker "0.2.2"]]
   :resource-paths ["config" "resources"]
   :datomic {:schemas ["resources/datomic/schema.edn"]}
   :profiles {:dev {:dependencies [[midje "1.6.3"]
