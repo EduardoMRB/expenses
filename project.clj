@@ -4,6 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
+                 [org.clojure/clojurescript "0.0-2665"]
                  [net.sf.ofx4j/ofx4j "1.6"]
                  [cc.artifice/ofx-clj "0.1"]
                  [clj-time "0.9.0"]
@@ -18,17 +19,45 @@
                  [org.slf4j/jul-to-slf4j "1.7.7"]
                  [org.slf4j/jcl-over-slf4j "1.7.7"]
                  [org.slf4j/log4j-over-slf4j "1.7.7"]
-                 
+
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
+
+                 [ns-tracker "0.2.2"]
                  
-                 [ns-tracker "0.2.2"]]
+                 [domina "1.0.3"]
+                 [hiccups "0.3.0"]]
+
+  :source-paths ["src/clj"]
   :resource-paths ["config" "resources"]
+
   :datomic {:schemas ["resources/datomic/schema.edn"]}
+
   :profiles {:dev {:dependencies [[midje "1.6.3"]
                                   [io.pedestal/pedestal.service-tools "0.3.1"]]
                    :aliases {"run-dev" ["trampoline" "run" "-m" "expenses.server/run-dev"]}
-                   :datomic {:config "resources/datomic/dev-transactor-template.properties"
+                   :datomic {:config "config/dev-transactor-template.properties"
                              :db-uri "datomic:dev://localhost:4334/expenses"}}}
+
   :repositories {"my.datomic.com" {:url "https://my.datomic.com/repo"
                                    :creds :gpg}}
-  :main ^{:skip-aot true} expenses.server)
+  :main ^{:skip-aot true} expenses.server
+
+  :plugins [[lein-cljsbuild "1.0.4"]]
+
+  :cljsbuild
+  {:builds
+   [{:id "dev"
+     :source-paths ["src/cljs"]
+     :compiler {:optimizations :none
+                :main expenses.core
+                :output-to "resources/public/js/expenses.js"
+                :output-dir "resources/public/js/out"
+                :source-map true
+                :pretty-print true}}
+    {:id "adv"
+     :source-paths ["src/cljs"]
+     :compiler {:optimizations :advanced
+                :pretty-print false
+                :static-fns true
+                :output-dir "out-adv"
+                :output-to "resources/public/js/expenses.js"}}]})

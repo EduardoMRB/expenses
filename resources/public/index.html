@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Expenses</title>
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <span id="position-x"></span>
+    <span id="position-y"></span>
+    <canvas id="canvas" width="800" height="800"></canvas>
+    <!-- pointing to cljsbuild generated js file -->
+    <script src="js/out/goog/base.js"></script>
+    <script src="js/expenses.js"></script>
+    <script>goog.require("expenses.core")</script>
+  </body>
+</html>

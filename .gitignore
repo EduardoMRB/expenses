@@ -11,3 +11,6 @@ resources/account/*
 resources/card/*
 resources/datomic/dev-transactor-template.properties
 /logs/*
+/repl
+/out
+out
