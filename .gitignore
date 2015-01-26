@@ -14,3 +14,4 @@ resources/datomic/dev-transactor-template.properties
 /repl
 /out
 out
+/.repl
