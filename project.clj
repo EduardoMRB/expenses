@@ -23,9 +23,11 @@
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
 
                  [ns-tracker "0.2.2"]
-                 
+
                  [domina "1.0.3"]
-                 [hiccups "0.3.0"]]
+                 [hiccups "0.3.0"]
+                 [cljs-ajax "0.3.9"]
+                 [org.omcljs/om "0.8.6"]]
 
   :source-paths ["src/clj"]
   :resource-paths ["config" "resources"]

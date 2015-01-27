@@ -6,14 +6,18 @@
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   </head>
   <body>
-    <span id="position-x"></span>
-    <span id="position-y"></span>
-    <canvas id="canvas" width="800" height="800"></canvas>
+    <div id="container"></div>
+
     <!-- pointing to cljsbuild generated js file -->
     <script src="js/out/goog/base.js"></script>
+    <script>goog.LOCALE = 'pt_BR';</script>
     <script src="js/expenses.js"></script>
-    <script>goog.require("expenses.core")</script>
+    <script>
+      goog.require("expenses.core")
+      goog.require("expenses.connect")
+    </script>
   </body>
 </html>

@@ -10,9 +10,6 @@
 (def service
   (::bootstrap/service-fn (bootstrap/create-servlet service/service)))
 
-(fact "There is no home page"
-  (:status (response-for service :get "/")) => 404)
-
 (facts "financial records"
   (:status (response-for service :get "/financial-record")) => 200
   (get-in (response-for service :get "/financial-record")
