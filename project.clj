@@ -4,7 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2665"]
+                 [org.clojure/clojurescript "0.0-2740"]
                  [net.sf.ofx4j/ofx4j "1.6"]
                  [cc.artifice/ofx-clj "0.1"]
                  [clj-time "0.9.0"]
@@ -27,7 +27,15 @@
                  [domina "1.0.3"]
                  [hiccups "0.3.0"]
                  [cljs-ajax "0.3.9"]
-                 [org.omcljs/om "0.8.6"]]
+                 [org.omcljs/om "0.8.6"]
+                 [com.cemerick/piggieback "0.1.5"]]
+
+  :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
+
+  :injections [(require '[cljs.repl.browser :as brepl]
+                        '[cemerick.piggieback :as pb])
+               (defn browser-repl []
+                 (pb/cljs-repl :repl-env (brepl/repl-env :port 9000)))]
 
   :source-paths ["src/clj"]
   :resource-paths ["config" "resources"]

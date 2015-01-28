@@ -1,6 +1,6 @@
 (ns expenses.core
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [cljs.core.async :as async :refer [>! <! put! chan timeout]]
+  (:require [cljs.core.async :as async :refer [>! <! put! chan]]
             [domina :as dom]
             [domina.events :as ev]
             [ajax.core :as ajax]
@@ -24,8 +24,9 @@
 
 (defn ^:export init []
   (let [c (get-financial-records)]
-    (go (while true
-          (let [records (<! c)
-                container (dom/by-id "container")]
-            (dom/append! container (template/records-table records)))))
+    (go 
+      (while true
+        (let [records (<! c)
+              container (dom/by-id "container")]
+          (dom/append! container (template/records-table records)))))
     c))
