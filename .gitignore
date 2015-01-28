@@ -14,5 +14,4 @@ resources/datomic/dev-transactor-template.properties
 /repl
 /out
 out
-/.repl- Any .repl folders should be ignored.
-- Log only to files under logs/ directory.*
+/.repl*
