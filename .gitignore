@@ -10,6 +10,7 @@ pom.xml.asc
 resources/account/*
 resources/card/*
 resources/datomic/dev-transactor-template.properties
+resources/public/js/expenses.js
 /logs/*
 /repl
 /out
