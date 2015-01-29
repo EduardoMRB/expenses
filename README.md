@@ -4,9 +4,7 @@ A Clojure application designed to calculate incomes and debts from Banco do Bras
 
 ## Usage
 
-```bash
-$ lein run documents-dir
-```
+TODO
 
 ## License
 
