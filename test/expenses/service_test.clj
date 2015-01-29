@@ -10,10 +10,15 @@
 (def service
   (::bootstrap/service-fn (bootstrap/create-servlet service/service)))
 
+(fact "home page is html"
+  (get-in (response-for service :get "/") 
+          [:headers "Content-Type"]) => "text/html")
+
 (facts "financial records"
   (:status (response-for service :get "/financial-record")) => 200
+
   (get-in (response-for service :get "/financial-record")
-          [:headers "Content-Type"]) => "application/json;charset=UTF-8"
+          [:headers "Content-Type"]) => "application/edn;charset=UTF-8"
 
   (fact "imported financial records are displayed in json"
     (with-local-conn

@@ -27,15 +27,7 @@
                  [domina "1.0.3"]
                  [hiccups "0.3.0"]
                  [cljs-ajax "0.3.9"]
-                 [org.omcljs/om "0.8.6"]
-                 [com.cemerick/piggieback "0.1.5"]]
-
-  :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
-
-  :injections [(require '[cljs.repl.browser :as brepl]
-                        '[cemerick.piggieback :as pb])
-               (defn browser-repl []
-                 (pb/cljs-repl :repl-env (brepl/repl-env :port 9000)))]
+                 [org.omcljs/om "0.8.6"]]
 
   :source-paths ["src/clj"]
   :resource-paths ["config" "resources"]
@@ -43,7 +35,17 @@
   :datomic {:schemas ["resources/datomic/schema.edn"]}
 
   :profiles {:dev {:dependencies [[midje "1.6.3"]
-                                  [io.pedestal/pedestal.service-tools "0.3.1"]]
+                                  [io.pedestal/pedestal.service-tools "0.3.1"]
+                                  [com.cemerick/piggieback "0.1.5"]]
+
+                   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
+
+                   :injections [(require '[cljs.repl.browser :as brepl]
+                                         '[cemerick.piggieback :as pb])
+                                (defn browser-repl []
+                                  (pb/cljs-repl :repl-env 
+                                                (brepl/repl-env :port 9000)))]
+
                    :aliases {"run-dev" ["trampoline" "run" "-m" "expenses.server/run-dev"]}
                    :datomic {:config "config/dev-transactor-template.properties"
                              :db-uri "datomic:dev://localhost:4334/expenses"}}}
@@ -63,7 +65,7 @@
                 :output-to "resources/public/js/expenses.js"
                 :output-dir "resources/public/js/out"
                 :source-map true
-                :pretty-print true}}
+                :pretty-print false}}
     {:id "adv"
      :source-paths ["src/cljs"]
      :compiler {:optimizations :advanced

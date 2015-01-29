@@ -14,15 +14,9 @@
   (-> (ring-resp/response (slurp "resources/public/index.html"))
       (ring-resp/content-type "text/html")))
 
-(defn- FinancialRecord->map [{:keys [id date description value]}]
-  {:id id
-   :date date
-   :description description
-   :value value})
-
 (defn list-financial-records [_]
   (-> (ring-resp/response (map FinancialRecord->map (db/all-financial-records)))
-      (ring-resp/content-type "application/edn")))
+      (ring-resp/content-type "application/edn;charset=UTF-8")))
 
 (defn list-financial-record [request]
   (let [id (get-in request [:path-params :id])]

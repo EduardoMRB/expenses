@@ -14,3 +14,9 @@
 
 (fact "`debt sums all debts correctly`"
   (debt test-records) => -19.95M)
+
+(fact "FinancialRecord->map"
+  (FinancialRecord->map (first test-records)) => {:date (date-time 2014 11 11)
+                                                 :description "Saldo Anterior"
+                                                 :value 111.87M
+                                                 :id 27274})

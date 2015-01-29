@@ -1,11 +1,12 @@
-(ns expenses.financial-record
-  (:import org.joda.time.DateTime))
+(ns expenses.financial-record)
 
-(defrecord FinancialRecord 
-  [date description value id])
+(defrecord FinancialRecord [date description value id])
 
 (defn vec->FinancialRecord [expense]
   (apply ->FinancialRecord expense))
+
+(defn FinancialRecord->map [^FinancialRecord record]
+  (into {} record))
 
 (defn- sum-expenses-by 
   "Takes a predicate fn and a coll of FinancialRecord and return
@@ -16,10 +17,9 @@
 (defn income [records]
   (letfn [(income? [record]
             (let [excludes-descriptions #{"S A L D O" "Saldo Anterior"}]
-              (and 
-                (not (contains? excludes-descriptions
-                                (:description record)))
-                (pos? (:value record)))))]
+              (and (not (contains? excludes-descriptions
+                                   (:description record)))
+                   (pos? (:value record)))))]
     (sum-expenses-by income? records)))
 
 (defn debt [records]
