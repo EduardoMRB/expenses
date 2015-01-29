@@ -1,6 +1,6 @@
 # Expenses
 
-A Clojure library designed to calculate incomes and debts from Banco do Brasil documents.
+A Clojure application designed to calculate incomes and debts from Banco do Brasil documents.
 
 ## Usage
 
