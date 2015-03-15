@@ -60,6 +60,8 @@
   :plugins [[lein-cljsbuild "1.0.4"]
             [lein-figwheel "0.2.3-SNAPSHOT"]]
 
+  :hooks [leiningen.cljsbuild]
+
   :cljsbuild
   {:builds
    [{:id "dev"
