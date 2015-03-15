@@ -16,3 +16,4 @@ resources/public/js/expenses.js
 /out
 out
 /.repl*
+/figwheel_server.log

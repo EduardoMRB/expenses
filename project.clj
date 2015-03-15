@@ -4,7 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2760"]
+                 [org.clojure/clojurescript "0.0-3058"]
                  [net.sf.ofx4j/ofx4j "1.6"]
                  [cc.artifice/ofx-clj "0.1"]
                  [clj-time "0.9.0"]
@@ -34,17 +34,20 @@
 
   :datomic {:schemas ["resources/datomic/schema.edn"]}
 
+  :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
+
+  :injections [(require '[cljs.repl.browser :as brepl]
+                        '[cemerick.piggieback :as pb])
+               (defn browser-repl []
+                 (pb/cljs-repl :repl-env 
+                               (brepl/repl-env :port 9000
+                                               :src "src")))]
+
   :profiles {:dev {:dependencies [[midje "1.6.3"]
                                   [io.pedestal/pedestal.service-tools "0.3.1"]
-                                  [com.cemerick/piggieback "0.1.5"]]
-
-                   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
-
-                   :injections [(require '[cljs.repl.browser :as brepl]
-                                         '[cemerick.piggieback :as pb])
-                                (defn browser-repl []
-                                  (pb/cljs-repl :repl-env 
-                                                (brepl/repl-env :port 9000)))]
+                                  [com.cemerick/piggieback "0.1.5"]
+                                  [figwheel "0.2.3-SNAPSHOT"]
+                                  [org.clojure/tools.nrepl "0.2.7"]]
 
                    :aliases {"run-dev" ["trampoline" "run" "-m" "expenses.server/run-dev"]}
                    :datomic {:config "config/dev-transactor-template.properties"
@@ -54,18 +57,18 @@
                                    :creds :gpg}}
   :main ^{:skip-aot true} expenses.server
 
-  :plugins [[lein-cljsbuild "1.0.4"]]
+  :plugins [[lein-cljsbuild "1.0.4"]
+            [lein-figwheel "0.2.3-SNAPSHOT"]]
 
   :cljsbuild
   {:builds
    [{:id "dev"
      :source-paths ["src/cljs"]
      :compiler {:optimizations :none
-                :main expenses.core
                 :output-to "resources/public/js/expenses.js"
                 :output-dir "resources/public/js/out"
-                :source-map true
-                :pretty-print false}}
+                :source-map "resources/public/js/expenses.js.map"
+                :pretty-print true}}
     {:id "adv"
      :source-paths ["src/cljs"]
      :compiler {:optimizations :advanced

@@ -1,8 +1,8 @@
 (ns expenses.core
-  (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [cljs.core.async :as async :refer [>! <! chan]]
+  (:require-macros [cljs.core.async.macros :refer [go]]
+                   [hiccups.core :refer [html]])
+  (:require [cljs.core.async :as async :refer [>! <! chan put!]]
             [domina :as dom]
-            [domina.events :as ev]
             [expenses.ajax :as ajax]
             [expenses.template :as template])
   (:import [goog.i18n DateTimeFormat TimeZone NumberFormat]))
@@ -13,7 +13,7 @@
   (let [c (ajax/get-financial-records)]
     (go 
       (while true
-        (let [records (<! c)
-              container (dom/by-id "container")]
+        (let [container (dom/by-id "container")
+              records (<! c)]
           (dom/append! container (template/records-table records)))))
     c))

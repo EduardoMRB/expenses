@@ -1,4 +1,6 @@
 (ns expenses.connect
-  (:require [clojure.browser.repl :as repl]))
+  (:require [figwheel.client :as fw]))
 
-(repl/connect "http://localhost:9000/repl")
+(enable-console-print!)
+
+(fw/start {:on-jsload (print "reloaded!")})
