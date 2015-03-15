@@ -46,7 +46,7 @@
   :profiles {:dev {:dependencies [[midje "1.6.3"]
                                   [io.pedestal/pedestal.service-tools "0.3.1"]
                                   [com.cemerick/piggieback "0.1.5"]
-                                  [figwheel "0.2.3-SNAPSHOT"]
+                                  [figwheel "0.2.5"]
                                   [org.clojure/tools.nrepl "0.2.7"]]
 
                    :aliases {"run-dev" ["trampoline" "run" "-m" "expenses.server/run-dev"]}
