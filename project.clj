@@ -4,7 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-3058"]
+                 [org.clojure/clojurescript "0.0-3169"]
                  [net.sf.ofx4j/ofx4j "1.6"]
                  [cc.artifice/ofx-clj "0.1"]
                  [clj-time "0.9.0"]
@@ -36,29 +36,21 @@
 
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
 
-  :injections [(require '[cljs.repl.browser :as brepl]
-                        '[cemerick.piggieback :as pb])
-               (defn browser-repl []
-                 (pb/cljs-repl :repl-env 
-                               (brepl/repl-env :port 9000
-                                               :src "src")))]
-
   :profiles {:dev {:dependencies [[midje "1.6.3"]
                                   [io.pedestal/pedestal.service-tools "0.3.1"]
-                                  [com.cemerick/piggieback "0.1.5"]
-                                  [figwheel "0.2.5"]
-                                  [org.clojure/tools.nrepl "0.2.7"]]
+                                  [com.cemerick/piggieback "0.2.0"]
+                                  [org.clojure/tools.nrepl "0.2.10"]]
 
                    :aliases {"run-dev" ["trampoline" "run" "-m" "expenses.server/run-dev"]}
                    :datomic {:config "config/dev-transactor-template.properties"
-                             :db-uri "datomic:dev://localhost:4334/expenses"}}}
+                             :db-uri "datomic:dev://localhost:4334/expenses"}
+                   :source-paths ["src/clj" "dev"]}}
 
   :repositories {"my.datomic.com" {:url "https://my.datomic.com/repo"
                                    :creds :gpg}}
-  :main ^{:skip-aot true} expenses.server
 
-  :plugins [[lein-cljsbuild "1.0.4"]
-            [lein-figwheel "0.2.3-SNAPSHOT"]]
+  :plugins [[lein-cljsbuild "1.0.5"]
+            [lein-figwheel "0.2.5"]]
 
   :hooks [leiningen.cljsbuild]
 
