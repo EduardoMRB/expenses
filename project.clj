@@ -49,8 +49,7 @@
   :repositories {"my.datomic.com" {:url "https://my.datomic.com/repo"
                                    :creds :gpg}}
 
-  :plugins [[lein-cljsbuild "1.0.5"]
-            [lein-figwheel "0.2.5"]]
+  :plugins [[lein-cljsbuild "1.0.5"]]
 
   :hooks [leiningen.cljsbuild]
 
