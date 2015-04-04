@@ -33,6 +33,9 @@
       server/create-server
       server/start))
 
+(defn stop-server []
+  (server/stop runnable-service))
+
 (defn -main
   "The entry-point for 'lein run'"
   [& args]
