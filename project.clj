@@ -44,7 +44,7 @@
                    :aliases {"run-dev" ["trampoline" "run" "-m" "expenses.server/run-dev"]}
                    :datomic {:config "config/dev-transactor-template.properties"
                              :db-uri "datomic:dev://localhost:4334/expenses"}
-                   :source-paths ["src/clj" "dev"]}}
+                   :source-paths ["dev"]}}
 
   :repositories {"my.datomic.com" {:url "https://my.datomic.com/repo"
                                    :creds :gpg}}
