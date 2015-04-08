@@ -26,7 +26,8 @@
                                   (require ns-sym :reload))
                                 @#'service/routes)
               ;; all origins are allowed in dev mode
-              ::server/allowed-origins {:creds true :allowed-origins (constantly true)}})
+              ::server/allowed-origins {:creds true 
+                                        :allowed-origins (constantly true)}})
       ;; Wire up interceptor chains
       server/default-interceptors
       server/dev-interceptors
