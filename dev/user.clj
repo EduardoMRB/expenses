@@ -1,6 +1,6 @@
 (ns user
   (:require [clojure.java.io :as io]
-            [midje.repl :refer :all]
+            [midje.repl :refer [autotest]]
             [clojure.repl :refer :all]
             [clojure.string :as s]
             [clojure.pprint :refer [pprint]]
